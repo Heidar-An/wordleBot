@@ -15,7 +15,7 @@ ORANGE = (255, 165, 0)
 YELLOW = (198, 176, 98)
 GREY = (122, 124, 125)
 
-display = [400, 480]
+display = [600, 480]
 pg.init()
 window = pg.display.set_mode(display, pg.RESIZABLE)
 mediumFont = pg.font.SysFont("Helvetica", 50)
@@ -32,8 +32,10 @@ rowNumber = 0
 
 
 def wordsInit():
+    """Load in all 5-letter words from the short txt or long txt"""
     global words
     f = open("shortWords.txt")
+    # f = open("words.txt")
     fText = f.read()
     tempString = ""
     for char in fText:
@@ -46,6 +48,7 @@ def wordsInit():
 
 
 def getInCommon():
+    """Get the key-value pairs for the dictionary for every comparison"""
     global allCommons
     commonFile = open("data.json", "r")
 
@@ -62,6 +65,7 @@ def getInCommon():
 
 
 def drawLetters():
+    """Show the boxes for each letter, and colour it in depending on the comparison"""
     window.fill(BLACK)
 
     for j in range(6):
@@ -89,7 +93,10 @@ def drawLetters():
 
 
 def inCommon(cWord, actualWord):
-    """Changes the global array for colours in common"""
+    """
+    Changes the global array for colours in common
+    NOT USEFUL DUE TO THE DICTIONARY HAVING THIS PRECOMPUTED
+    """
     outputArr = ["B" for i in range(5)]
     letterSeen = [False for i in range(5)]
     global allCommons
@@ -100,6 +107,7 @@ def inCommon(cWord, actualWord):
             outputArr[i] = "G"
             letterSeen[i] = True
 
+    # find yellow
     for indexTwo, char in enumerate(cWord):
         for index, correctChar in enumerate(actualWord):
             if char == correctChar and outputArr[indexTwo] == "B":
@@ -112,14 +120,14 @@ def inCommon(cWord, actualWord):
     for common in outputArr:
         value += common
     allCommons[key] = value
-    # return outputArr
 
-
-# guess = hello, 'B' 'B''B' 'B' 'B',
 
 # all possible words  /12,000  instead of 12000 divides by the amount of actual possible words
 
 def everyWord():
+    """
+    Used to write key-value pairs into json
+    """
     file = open("data.json", "w")
     for index, x in enumerate(words):
         for y in words:
@@ -129,6 +137,9 @@ def everyWord():
 
 
 def getInformation(word):
+    """
+    Find how good a particular word is
+    """
     global allCommons
     dictionary = {}
     for x in possibleWords:
@@ -149,6 +160,9 @@ def getInformation(word):
 
 
 def highestInfo():
+    """
+    Find the words with the highest entropy
+    """
     currentMax = -10000
     currentBestWord = ""
 
@@ -166,6 +180,9 @@ def highestInfo():
 
 
 def updatePossibleWord(guessWord, colourResult):
+    """
+    Once a word has been guessed, find all possible remaining words
+    """
     for i in range(len(possibleWords) - 1, -1, -1):
         if allCommons[guessWord + ":" + possibleWords[i]] != colourResult:
             possibleWords.pop(i)
