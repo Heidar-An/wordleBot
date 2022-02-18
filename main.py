@@ -15,7 +15,7 @@ ORANGE = (255, 165, 0)
 YELLOW = (198, 176, 98)
 GREY = (122, 124, 125)
 
-display = [600, 480]
+display = [400, 480]
 pg.init()
 window = pg.display.set_mode(display, pg.RESIZABLE)
 mediumFont = pg.font.SysFont("Helvetica", 50)
