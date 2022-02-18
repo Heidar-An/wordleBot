@@ -15,7 +15,7 @@ ORANGE = (255, 165, 0)
 YELLOW = (198, 176, 98)
 GREY = (122, 124, 125)
 
-display = [400, 480]
+display = [600, 480]
 pg.init()
 window = pg.display.set_mode(display, pg.RESIZABLE)
 mediumFont = pg.font.SysFont("Helvetica", 50)
@@ -170,7 +170,7 @@ def updatePossibleWord(guessWord, colourResult):
         if allCommons[guessWord + ":" + possibleWords[i]] != colourResult:
             possibleWords.pop(i)
 
-# (x, y)
+
 drawLetters()
 wordsInit()
 correctWord = random.choice(words)
