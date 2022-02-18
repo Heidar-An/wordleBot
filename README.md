@@ -1,6 +1,6 @@
 # wordleBot
 
-Inspired by 3b1b, me and my friend decided to make a wordle bot.
+Inspired by 3b1b, me and my friend decided to make a wordle bot. Using Python and the Pygame library.
 
 ## How it works
 
