@@ -32,7 +32,9 @@ rowNumber = 0
 
 
 def wordsInit():
-    """Load in all 5-letter words from the short txt or long txt"""
+    """
+    Load in all 5-letter words from the short txt or long txt
+    """
     global words
     f = open("shortWords.txt")
     # f = open("words.txt")
@@ -48,7 +50,9 @@ def wordsInit():
 
 
 def getInCommon():
-    """Get the key-value pairs for the dictionary for every comparison"""
+    """
+    Get the key-value pairs for the dictionary for every comparison
+    """
     global allCommons
     commonFile = open("data.json", "r")
 
@@ -65,7 +69,9 @@ def getInCommon():
 
 
 def drawLetters():
-    """Show the boxes for each letter, and colour it in depending on the comparison"""
+    """
+    Show the boxes for each letter, and colour it in depending on the comparison
+    """
     window.fill(BLACK)
 
     for j in range(6):
