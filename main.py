@@ -121,11 +121,11 @@ def inCommon(cWord, actualWord):
                     letterSeen[index] = True
                     outputArr[indexTwo] = "Y"
                     break
-    key = cWord + ":" + actualWord
+    wordKey = cWord + ":" + actualWord
     value = ""
     for common in outputArr:
         value += common
-    allCommons[key] = value
+    allCommons[wordKey] = value
 
 
 # all possible words  /12,000  instead of 12000 divides by the amount of actual possible words
@@ -135,7 +135,7 @@ def everyWord():
     Used to write key-value pairs into json
     """
     file = open("data.json", "w")
-    for index, x in enumerate(words):
+    for x in words:
         for y in words:
             inCommon(x, y)
     json.dump(allCommons, file)
@@ -157,12 +157,12 @@ def getInformation(word):
             dictionary[listCommon] += 1
         else:
             dictionary[listCommon] = 1
-    sum = 0
+    wordSum = 0
     for x in dictionary.values():
         p = x / len(possibleWords)
-        sum += p * math.log2(1 / p)
+        wordSum += p * math.log2(1 / p)
 
-    return sum
+    return wordSum
 
 
 def highestInfo():
