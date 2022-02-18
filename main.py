@@ -18,6 +18,7 @@ GREY = (122, 124, 125)
 display = [600, 480]
 pg.init()
 window = pg.display.set_mode(display, pg.RESIZABLE)
+smallFont = pg.font.SysFont("Helvetica", 27)
 mediumFont = pg.font.SysFont("Helvetica", 50)
 window.fill(BLACK)
 pg.display.update()
@@ -90,11 +91,12 @@ def drawLetters():
                 pg.draw.rect(window, WHITE, rect)
                 pg.draw.rect(window, colour, (rect[0] + 2, rect[1] + 2, rect[2] - 4, rect[3] - 4))
 
-                window.blit(text, (rect[0] + 20, rect[1] + 5))
+                window.blit(text, (rect[0] + 23, rect[1] + 8))
             else:
                 pg.draw.rect(window, WHITE, rect)
                 pg.draw.rect(window, colour, (rect[0] + 2, rect[1] + 2, rect[2] - 4, rect[3] - 4))
 
+    bestGuesses()
     pg.display.update()
 
 
@@ -169,20 +171,25 @@ def highestInfo():
     """
     Find the words with the highest entropy
     """
+    wordVals = {}
     currentMax = -10000
     currentBestWord = ""
 
     for x in words:
         information = getInformation(x)
 
+        wordVals[x] = information
         if information > currentMax:
             currentMax = information
             currentBestWord = x
 
     if len(possibleWords) == 1 or currentMax == 0:
-        return possibleWords[0]
-
-    return currentBestWord
+        print("Word with highest entropy: " + possibleWords[0])
+        return {"The ": 0, "correct": 0, "word": 0, "is": 0, "definitely": 0, possibleWords[0]: 0}
+    else:
+        print("Word with highest entropy: " + currentBestWord)
+    # return currentBestWord
+    return wordVals
 
 
 def updatePossibleWord(guessWord, colourResult):
@@ -194,14 +201,44 @@ def updatePossibleWord(guessWord, colourResult):
             possibleWords.pop(i)
 
 
-drawLetters()
-wordsInit()
-correctWord = random.choice(words)
-print(correctWord)
-cWord = ""
-getInCommon()
+def bestGuesses():
+    """
+    Show the best 6 words
+    """
+    global wordVals
+    # drawLetters()
+    wordVals = dict(sorted(wordVals.items(), key=lambda item: item[1], reverse=True))
+    text = smallFont.render("E[Info]", True, WHITE)
+    window.blit(text, (532, 10))
 
-print("Word with highest entropy: " + highestInfo())
+    text = smallFont.render("Top Picks", True, WHITE)
+    window.blit(text, (420, 10))
+    for i in range(6):
+        text = smallFont.render(str(list(wordVals)[i]), True, WHITE)
+        window.blit(text, (420, 50 + 65 * i))
+
+        text = smallFont.render(str(list(wordVals.values())[i]), True, WHITE)
+        window.blit(text, (532, 50 + 65 * i))
+
+    pg.display.update()
+
+
+def init():
+    global correctWord, cWord, wordVals, wordsGuessedArr, inCommonArr, rowNumber
+    wordsGuessedArr = [['#', '#', '#', '#', '#'] for j in range(6)]
+    inCommonArr = [['B', 'B', 'B', 'B', 'B'] for j in range(6)]
+    rowNumber = 0
+    wordsInit()
+    correctWord = random.choice(words)
+    print(correctWord)
+    cWord = ""
+    getInCommon()
+
+    wordVals = highestInfo()
+    drawLetters()
+
+
+init()
 while True:
     for event in pg.event.get():
         if event.type == pg.QUIT:
@@ -215,9 +252,13 @@ while True:
                         inCommonArr[rowNumber][index] = val
                     pg.display.update()
                     updatePossibleWord(cWord, arr)
-                    print("Word with highest info: " + highestInfo())
+                    bestGuesses()
                     cWord = ""
                     rowNumber += 1
+                    wordVals = highestInfo()
+
+                    # if arr == "GGGGG":
+                    #     init()
             elif event.key != pg.K_BACKSPACE and len(cWord) < 5:
                 key = event.unicode
                 wordsGuessedArr[rowNumber][len(cWord)] = key
